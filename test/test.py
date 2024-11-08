@@ -1,3 +1,2 @@
-print('hello, world')
-print('hi kadin')
-print('hi john')
+from john import evan
+print(evan.kadin)

@@ -1,31 +1,33 @@
 # app.py
 from flask import Flask, jsonify
 from flask_cors import CORS
-import psutil
+import random
 import time
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5500"}})
 
-def get_energy_metrics():
-    # Simulating energy usage with basic system metrics
-    cpu_usage = psutil.cpu_percent(interval=1)            # CPU usage in %
-    ram_usage = psutil.virtual_memory().percent            # RAM usage in %
-    disk_usage = psutil.disk_usage('/').percent            # Disk usage in %
-    # You could add additional measurements or calculations if you have a way to measure energy directly
+def get_random_energy_metrics():
+    # Simulating energy consumption with random numbers
+    cpu_usage = random.uniform(10, 100)           # Random CPU usage between 10% and 100%
+    ram_usage = random.uniform(10, 100)            # Random RAM usage between 10% and 100%
+    disk_usage = random.uniform(10, 100)           # Random Disk usage between 10% and 100%
 
+    # Simulated total energy consumption
+    total_consumption = cpu_usage + ram_usage + disk_usage
+    
     metrics = {
         "time": time.strftime("%Y-%m-%d %H:%M:%S"),
         "cpu_usage": cpu_usage,
         "ram_usage": ram_usage,
         "disk_usage": disk_usage,
-        "total_consumption": cpu_usage + ram_usage + disk_usage  # Simulated total energy consumption
+        "total_consumption": total_consumption
     }
     return metrics
 
 @app.route('/metrics')
 def metrics():
-    return jsonify(get_energy_metrics())
+    return jsonify(get_random_energy_metrics())
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -3,65 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Real-Time Energy Consumption</title>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-</head>
-<body>
-  <h1>Real-Time Computer Energy Consumption</h1>
-  <div id="energyChart" style="width:100%; max-width:800px; height:500px;"></div>
-
+  <title>Energy Consumption Dashboard</title>
   <script>
-    const timeData = [];
-    const cpuData = [];
-    const ramData = [];
-    const diskData = [];
-    const totalData = [];
-
-    async function fetchMetrics() {
-      try {
-        const response = await fetch("http://127.0.0.1:5000/metrics");
-        const data = await response.json();
-
-        // Add new data to arrays
-        timeData.push(data.time);
-        cpuData.push(data.cpu_usage);
-        ramData.push(data.ram_usage);
-        diskData.push(data.disk_usage);
-        totalData.push(data.total_consumption);
-
-        // Keep only the last 50 points for better performance
-        if (timeData.length > 50) {
-          timeData.shift();
-          cpuData.shift();
-          ramData.shift();
-          diskData.shift();
-          totalData.shift();
-        }
-
-        // Update the graph
-        Plotly.update("energyChart", {
-          x: [timeData, timeData, timeData, timeData],
-          y: [cpuData, ramData, diskData, totalData]
+    // This function fetches the energy metrics from the Flask backend
+    function fetchMetrics() {
+      fetch("http://127.0.0.1:5000/metrics")  // URL of the Flask API
+        .then(response => response.json())
+        .then(data => {
+          // Update the HTML content with the fetched metrics
+          document.getElementById('time').textContent = "Time: " + data.time;
+          document.getElementById('cpu').textContent = "CPU Usage: " + data.cpu_usage.toFixed(2) + "%";
+          document.getElementById('ram').textContent = "RAM Usage: " + data.ram_usage.toFixed(2) + "%";
+          document.getElementById('disk').textContent = "Disk Usage: " + data.disk_usage.toFixed(2) + "%";
+          document.getElementById('total').textContent = "Total Energy Consumption: " + data.total_consumption.toFixed(2) + " Watts";
+        })
+        .catch(error => {
+          console.error("Error fetching metrics:", error);
+          document.getElementById('error').textContent = "Error fetching metrics. Please try again.";
         });
-      } catch (error) {
-        console.error("Error fetching metrics:", error);
-      }
     }
 
-    // Initialize the plot with empty data
-    Plotly.newPlot("energyChart", [
-      { x: timeData, y: cpuData, mode: 'lines', name: 'CPU Usage (%)', line: { color: 'blue' } },
-      { x: timeData, y: ramData, mode: 'lines', name: 'RAM Usage (%)', line: { color: 'green' } },
-      { x: timeData, y: diskData, mode: 'lines', name: 'Disk Usage (%)', line: { color: 'red' } },
-      { x: timeData, y: totalData, mode: 'lines', name: 'Total Consumption (%)', line: { color: 'black', dash: 'dash' } }
-    ], {
-      title: 'Computer Energy Consumption Over Time',
-      xaxis: { title: 'Time' },
-      yaxis: { title: 'Usage (%)' }
-    });
-
-    // Fetch metrics every 5 seconds
+    // Set an interval to call fetchMetrics every 5 seconds (5000ms)
     setInterval(fetchMetrics, 5000);
   </script>
+</head>
+<body>
+  <div>
+    <h1>Energy Consumption Dashboard</h1>
+    <p id="time"></p>
+    <p id="cpu"></p>
+    <p id="ram"></p>
+    <p id="disk"></p>
+    <p id="total"></p>
+    <p id="error" style="color: red;"></p>
+  </div>
+
+  <!-- You can add CSS styling or use external libraries to make the page look better -->
 </body>
 </html>

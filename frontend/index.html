@@ -5,26 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Energy Consumption Dashboard</title>
   <script>
-    // This function fetches the energy metrics from the Flask backend
-    function fetchMetrics() {
-      fetch("http://127.0.0.1:5000/metrics")  // URL of the Flask API
-        .then(response => response.json())
-        .then(data => {
-          // Update the HTML content with the fetched metrics
-          document.getElementById('time').textContent = "Time: " + data.time;
-          document.getElementById('cpu').textContent = "CPU Usage: " + data.cpu_usage.toFixed(2) + "%";
-          document.getElementById('ram').textContent = "RAM Usage: " + data.ram_usage.toFixed(2) + "%";
-          document.getElementById('disk').textContent = "Disk Usage: " + data.disk_usage.toFixed(2) + "%";
-          document.getElementById('total').textContent = "Total Energy Consumption: " + data.total_consumption.toFixed(2) + " Watts";
-        })
-        .catch(error => {
-          console.error("Error fetching metrics:", error);
-          document.getElementById('error').textContent = "Error fetching metrics. Please try again.";
-        });
-    }
+    fetch("http://127.0.0.1:5000/metrics")
+    // // This function fetches the energy metrics from the Flask backend
+    // function fetchMetrics() {
+    //   fetch("http://127.0.0.1:5000/metrics")  // URL of the Flask API
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       // Update the HTML content with the fetched metrics
+    //       document.getElementById('time').textContent = "Time: " + data.time;
+    //       document.getElementById('cpu').textContent = "CPU Usage: " + data.cpu_usage.toFixed(2) + "%";
+    //       document.getElementById('ram').textContent = "RAM Usage: " + data.ram_usage.toFixed(2) + "%";
+    //       document.getElementById('disk').textContent = "Disk Usage: " + data.disk_usage.toFixed(2) + "%";
+    //       document.getElementById('total').textContent = "Total Energy Consumption: " + data.total_consumption.toFixed(2) + " Watts";
+    //     })
+    //     .catch(error => {
+    //       console.error("Error fetching metrics:", error);
+    //       document.getElementById('error').textContent = "Error fetching metrics. Please try again.";
+    //     });
+    // }
 
-    // Set an interval to call fetchMetrics every 5 seconds (5000ms)
-    setInterval(fetchMetrics, 5000);
+    // // Set an interval to call fetchMetrics every 5 seconds (5000ms)
+    // setInterval(fetchMetrics, 5000);
   </script>
 </head>
 <body>

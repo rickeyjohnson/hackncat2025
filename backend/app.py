@@ -5,7 +5,7 @@ import random
 import time
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5500"}})
+CORS(app, resources={r"/metrics": {"origins": "http://127.0.0.1:5500"}})
 
 def get_random_energy_metrics():
     # Simulating energy consumption with random numbers
